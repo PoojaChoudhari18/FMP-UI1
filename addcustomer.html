@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Customer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" xintegrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Base styles for desktop */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f7fb;
+      padding: 40px;
+      margin: 0; /* Reset margin for consistent behavior */
+    }
+
+    .form-container {
+      background: #fff;
+      border: 2px solid #007bff;
+      border-radius: 6px;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 15px;
+      justify-content: space-between; /* Distribute tabs horizontally */
+      flex-wrap: wrap; /* Allow tabs to wrap if space is limited */
+    }
+
+    .tabs a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 5px;
+      flex-grow: 1; /* Allow tabs to grow and fill space */
+      text-align: center; /* Center text within each tab */
+    }
+
+    .tabs a.active {
+      border-color: #007bff;
+    }
+
+    .accordion {
+      margin-bottom: 20px;
+    }
+
+    .accordion-btn {
+      display: flex; /* Make accordion button a flex container */
+      justify-content: space-between; /* Push text to left, icon to right */
+      align-items: center; /* Vertically align items */
+      width: 100%;
+      text-align: left;
+      background: #e8f0fe;
+      border: none;
+      padding: 10px;
+      margin-bottom: 5px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .accordion-btn.active {
+      background: #d0e3ff;
+    }
+
+    .form-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .form-group {
+      flex: 1 1 calc(50% - 20px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full {
+      flex: 1 1 100%;
+    }
+
+    .form-group label {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .form-group input {
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .mobile-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mobile-input input {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+
+    .save-btn {
+      background: #007bff;
+      border: none;
+      color: #fff;
+      padding: 8px 25px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .save-btn1 { /* Used for the "Close" button as per your HTML */
+      background: #fff;
+      border: 1px solid #ccc;
+      color: #333;
+      padding: 8px 25px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Responsive adjustments for screens up to 768px wide */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px; /* Reduce overall padding on smaller screens */
+      }
+
+      .form-container {
+        border: none; /* Remove dashed border for a cleaner look on mobile */
+        padding: 15px;
+      }
+
+      .tabs {
+        flex-direction: row; /* Ensure tabs remain horizontal */
+        flex-wrap: wrap; /* Allow tabs to wrap to the next line if space is limited */
+        gap: 10px; /* Adjust gap between tabs for smaller screens */
+        justify-content: space-around; /* Distribute tabs evenly in the available space */
+      }
+
+      .tabs a {
+        flex-grow: 0; /* Prevent tabs from growing excessively */
+        flex-basis: auto; /* Allow content to dictate tab width */
+        padding: 8px 10px; /* Adjust padding for smaller tabs */
+        font-size: 14px; /* Slightly smaller font for tab text */
+        white-space: nowrap; /* Prevent text from wrapping within a tab */
+      }
+      
+      .tabs a.active {
+        background-color: #e0f0ff; /* Highlight active tab with a background color */
+        border-color: transparent; /* Remove bottom border when active */
+      }
+
+      .accordion-btn {
+        padding: 12px 10px; /* Increase padding for better touch targets */
+        font-size: 16px; /* Slightly larger font for readability */
+      }
+
+      .form-grid {
+        flex-direction: column; /* Stack form groups vertically */
+        gap: 15px; /* Adjust gap between stacked form groups */
+      }
+
+      .form-group, .form-group.full {
+        flex: 1 1 100%; /* Make all form groups full width on mobile */
+      }
+
+      .actions {
+        flex-direction: column-reverse; /* Stack buttons, "Close" on top of "Save" */
+        gap: 10px; /* Space between stacked buttons */
+      }
+
+      .save-btn, .save-btn1 {
+        width: 100%; /* Make buttons full width on mobile */
+        padding: 12px 0; /* Increase padding for better touch targets */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Add customer</h2>
+    <div class="tabs">
+      <a href="#" class="active">Account details</a>
+      <a href="#">Contact</a>
+      <a href="#">Finance setting</a>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-btn">Customer details</button>
+      <button class="accordion-btn">Business address</button>
+      <button class="accordion-btn active">Business contact <i class="fa-solid fa-caret-down"></i></button>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="arun5454@gmail.com">
+      </div>
+      <div class="form-group">
+        <label>Website</label>
+        <input type="text" placeholder="www.arunarora.com">
+      </div>
+      <div class="form-group full">
+        <label>City</label>
+        <input type="text" placeholder="Mahape, Navi Mumbai - 400702">
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="text" placeholder="8790521454">
+      </div>
+      <div class="form-group">
+        <label>Mobile</label>
+        <div class="mobile-input">
+          <span class="flag-icon flag-icon-in"></span>
+          <input type="text" placeholder="+91 8799521454">
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="save-btn1" onclick="history.back()">Close</button>
+      <button class="save-btn">Save</button>
+    </div>
+  </div>
+</body>
+</html>

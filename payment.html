@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Make My Payment</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+    
+
+<div class="header">
+        <div class="left-section">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLjX3rfIZw-1W6jrHmkDohECiQfalX4mko0p7lT77IBUgCZNC2"
+                alt="Logo" class="logo" />
+            <button class="menu-toggle" id="menuToggle">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png" alt="menu" />
+            </button>
+        </div>
+        <div class="right-section">
+            <button class="header-btn">⚙️ </button>
+            <button class="header-btn">💬</button>
+            <button class="header-btn">🔔</button>
+            <select class="dropdown">
+                <option selected>Bangalore</option>
+                <option>Mumbai</option>
+                <option>Delhi</option>
+            </select>
+            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Profile" class="profile-pic" />
+        </div>
+    </div>
+
+    <style>
+        :root {
+            --sidebar-bg: #ffffff;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --text-color-dark: #333;
+            --text-color-light: #888;
+            --border-color: #e0e0e0;
+            --primary-color: #2563eb;
+            --primary-hover-color: #1e40af;
+            /* New colors for mobile header elements */
+            --mobile-header-icon-bg: #f5f7fa;
+            --mobile-header-icon-border: #e0e0e0;
+            --mobile-header-icon-color: #4a5568;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            padding-top: 70px;
+            display: flex;
+            transition: background-color 0.3s;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            padding: 0 30px;
+            background-color: #ffffff;
+            color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-section,
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: none;
+        }
+
+        .menu-toggle img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .header-btn {
+            background-color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            color: #2563eb;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .header-btn:hover {
+            background-color: #dbeafe;
+            transform: scale(1.05);
+        }
+
+        .dropdown {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #cdd5e1;
+            color: #2563eb;
+            font-weight: 500;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #a8c8f8;
+        }
+
+
+          @media (max-width: 768px){ 
+  .header {
+                padding: 0 15px; /* Smaller padding for mobile header */
+            }
+
+            .menu-toggle {
+                display: block;
+                padding: 5px; /* Add some padding around the menu icon */
+            }
+
+            .left-section .logo {
+                display: none; /* Hide logo on mobile as per image */
+            }
+
+            .header-btn {
+                padding: 8px 12px; /* Smaller padding for header buttons */
+                border-radius: 50%; /* Make chat and bell circular */
+                box-shadow: none; /* Remove shadow from these buttons */
+                background-color: var(--mobile-header-icon-bg); /* New background color */
+                border: 1px solid var(--mobile-header-icon-border); /* New border */
+                color: var(--mobile-header-icon-color); /* New icon color */
+                font-size: 1em; /* Adjust font size for consistency */
+                width: 38px; /* Fixed width for circular buttons */
+                height: 38px; /* Fixed height for circular buttons */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .header-btn:hover {
+                background-color: #e2e8f0; /* Slightly darker on hover */
+                transform: none; /* No scale transform on mobile buttons */
+            }
+
+            .header-btn:first-of-type { /* Adjust 'Generate' button specifically */
+                background-color: #e0e7ff; /* Lighter blue background */
+                color: var(--primary-color);
+                border-radius: 10px; /* More rounded rectangle */
+                width: auto; /* Auto width */
+                height: auto; /* Auto height */
+                padding: 8px 12px;
+                display: flex; /* Ensure content is centered */
+                align-items: center;
+                gap: 5px; /* Gap between icon and text */
+                border: none; /* No border for generate button */
+            }
+
+            .header-btn:first-of-type .btn-text {
+                display: block; /* Show text for 'Generate' button */
+            }
+
+            .dropdown {
+                padding: 8px 12px; /* Smaller padding for dropdown */
+                border-radius: 10px; /* More rounded corners */
+                font-size: 0.9em;
+                color: #4a5568; /* Darker text color */
+                border: 1px solid var(--mobile-header-icon-border);
+                background-color: var(--mobile-header-icon-bg);
+            }
+
+            .profile-pic {
+                width: 38px;
+                height: 38px;
+                border: 2px solid #a8c8f8; /* Keep existing border */
+            }
+
+            .left-section,
+            .right-section {
+                gap: 8px; /* Smaller gap in header */
+            }
+            
+        }
+
+        </style>
+    <div class="container">
+        <h2>Payment</h2>
+
+        <div class="payment-box">
+            <div class="form-group">
+                <label for="paymentMethod">Payment method</label>
+                <select id="paymentMethod">
+                     <option>Select Options</option>                    
+                    <option>payment gateway</option>                    
+                    <option>Cheque</option>
+                     <option>Offline</option>
+
+                </select>
+            </div>
+
+            <div class="details-box">
+                <div class="details-row">
+                    <span>Invoice no</span>
+                    <span>INV2998-08-087</span>
+                </div>
+                <div class="details-row">
+                    <span>Currency</span>
+                    <span>INR</span>
+                </div>
+                <div class="details-row">
+                    <span>Amount</span>
+                    <span>$</span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <!-- <label>Bank name</label> -->
+                     <h6>Bank name</h6>
+                    <input type="text" placeholder="Enter bank name" />
+                </div>
+                <div class="form-group">
+                    <!-- <label>Branch</label> -->
+                    <h6>Branch Name</h6>
+                    <input type="text" placeholder="Enter branch name" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <!-- <label>UTR/SWIFT/TRANS number</label> -->
+                    <h5>UTR/SWIFT/TRANS Number</h5>
+                    <input type="text" placeholder="Enter number" />
+                </div>
+                <div class="form-group">
+                    <!-- <label>Cheque number</label> -->
+                    <h5>Cheque Number</h5>
+                    <input type="text" placeholder="Enter number" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <!-- <label>Payment date*</label> -->
+                    <h5>Payement Date</h5>
+                    <input type="date" value="2025-03-23" />
+                </div>
+                <div class="form-group">
+                    <!-- <label>Amount</label> -->
+                   <h5>Amount</h5>
+                    <input type="text" value="32.75" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Remark</label>
+                <textarea placeholder="Add remark"></textarea>
+            </div>
+
+            <div class="upload-section">
+                <label>Upload</label>
+                <div class="upload-area">
+                    <div class="file-preview">
+                        <img src="https://via.placeholder.com/20x20" alt="file icon" style="vertical-align: middle; margin-right: 5px;"> image.jpeg <span>12 kb</span>
+                    </div>
+                    <div class="upload-actions">
+                        <button class="icon-btn"><img src="https://cdn-icons-png.flaticon.com/512/126/126486.png" alt="download" style="width:16px;height:16px;"></button>
+                        <button class="icon-btn"><img src="https://cdn-icons-png.flaticon.com/512/1345/1345823.png" alt="delete" style="width:16px;height:16px;"></button>
+                        <button class="icon-btn"><img src="https://cdn-icons-png.flaticon.com/512/1000/1000966.png" alt="upload" style="width:16px;height:16px;"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons-container">
+                <button class="pay-btn">Pay</button>
+                <button class="cancel-btn" onclick="history.back()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* CSS Variables */
+        
+        /* Container & Payment Box */
+        .container {
+            flex-grow: 1; /* Allow container to take available space */
+            padding: 20px; /* Default padding for desktop */
+            padding-top: 20px; /* Space for fixed header */
+            width: 100%;
+            max-width: 800px; /* Max width for content on desktop */
+            margin: 0 auto; /* Center on desktop */
+            box-sizing: border-box; /* Include padding in the width */
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Enable scrolling for the content inside the box */
+        }
+
+        h2 {
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            font-size: 1.8em; /* Adjust font size */
+            text-align: left;
+        }
+
+        .payment-box {
+            background: var(--bg-white);
+            padding: 25px; /* Increased padding */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            flex-grow: 1; /* Allow payment box to grow */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-size: 14px;
+            margin-bottom: 8px; /* More space below label */
+            display: block;
+            color: #555; /* Softer label color */
+        }
+
+        select,
+        input[type="text"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 12px; /* Increased padding for inputs */
+            border: 1px solid #ddd;
+            border-radius: 8px; /* Softer borders */
+            font-size: 15px;
+            color: var(--text-color);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        select:focus,
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(47, 115, 242, 0.1);
+        }
+
+        textarea {
+            min-height: 80px; /* Taller textarea */
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        /* Desktop specific styles for form rows */
+        .form-row {
+            display: flex;
+            gap: 20px; /* Space between input pairs */
+            margin-bottom: 15px; /* Space between rows */
+        }
+
+        .form-row .form-group {
+            flex: 1; /* Each form group takes equal width in a row */
+            margin-bottom: 0; /* Remove bottom margin if part of a flex row */
+        }
+
+
+        /* Details Box */
+        .details-box {
+            background: #f8fafd; /* Lighter background */
+            border-radius: 8px;
+            padding: 15px 20px; /* Adjusted padding */
+            margin-bottom: 20px;
+            border: 1px solid #eef2f8; /* Subtle border */
+        }
+
+        .details-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 15px;
+            border-bottom: 1px solid #f2f5f9; /* Lighter separator */
+        }
+
+        .details-row:last-child {
+            border-bottom: none; /* No border for the last row */
+        }
+
+        .details-row span:first-child {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .details-row span:last-child {
+            color: var(--text-color);
+            font-weight: 600; /* Make value bold */
+        }
+
+        /* Upload Section */
+        .upload-section {
+            margin-top: 10px; /* Space from remark */
+            margin-bottom: 20px; /* Space before buttons */
+            display: flex;
+            flex-direction: column; /* Stack label and upload area */
+            gap: 10px;
+        }
+
+        .upload-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #eef6ff; /* Match image color */
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            border: 1px solid #d0e4ff; /* Subtle border */
+        }
+
+        .file-preview {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #2f73f2; /* Blue text for file name */
+            font-weight: 500;
+        }
+
+        .file-preview img {
+            width: 18px;
+            height: 18px;
+        }
+
+        .file-preview span {
+            font-size: 12px;
+            color: #888;
+            margin-left: 0; /* Remove extra margin */
+        }
+
+        .upload-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+        }
+        .icon-btn:hover {
+            background-color: #e0e7ff;
+        }
+        .icon-btn img {
+            width: 20px;
+            height: 20px;
+            display: block; /* Remove extra space below image */
+        }
+
+        /* Buttons */
+        .buttons-container {
+            display: flex;
+            justify-content: flex-end; /* Align to right on desktop */
+            gap: 15px; /* Space between buttons */
+            margin-top: auto; /* Push to bottom of payment-box */
+            padding-top: 20px; /* Space from content above */
+            border-top: 1px solid #eee; /* Separator line */
+        }
+
+        .pay-btn,
+        .cancel-btn {
+            padding: 12px 25px; /* Larger padding */
+            border: none;
+            border-radius: 8px; /* Softer borders */
+            cursor: pointer;
+            font-size: 16px; /* Larger font */
+            font-weight: 600; /* Bold text */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .pay-btn:hover {
+            background-color: #205ac8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(47, 115, 242, 0.2);
+        }
+
+        .cancel-btn {
+            background: #e5e5e5;
+            color: var(--text-color);
+        }
+
+        .cancel-btn:hover {
+            background-color: #dcdcdc;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- RESPONSIVE STYLES --- */
+        @media (max-width: 768px) {
+            body {
+                background-color: var(--mobile-blue-bg); /* Mobile background */
+            }
+
+            .container {
+                padding: 15px; /* Adjusted padding for mobile */
+                padding-top: calc(px + 4px); /* Header (60px) + mobile dropdown (approx 55px) */
+                max-width: 100%; /* No max-width on mobile */
+                margin: 0 auto; /* Center on mobile */
+            }
+
+            h2 {
+                font-size: 1.6em;
+                text-align: left; /* Keep left alignment as per image */
+                margin-left: 0; /* No indentation for heading */
+            }
+
+            .payment-box {
+                padding: 15px;
+            }
+
+            /* For form-groups, remove desktop-specific .form-row rules */
+            .form-row {
+                flex-direction: column; /* Stack inputs vertically */
+                gap: 15px; /* Space between stacked inputs */
+            }
+            .form-group {
+                margin-bottom: 0; /* Remove bottom margin if part of a flex row */
+            }
+
+            /* Ensure inputs fill width */
+            select, input[type="text"], input[type="date"], textarea {
+                width: 100%;
+                box-sizing: border-box; /* Include padding in width */
+            }
+
+            .upload-section {
+                margin-top: 10px;
+                margin-bottom: 20px;
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start; /* Align label to start */
+            }
+
+            .upload-area {
+                flex-direction: column;
+                align-items: flex-start; /* Align file preview and actions to start */
+                gap: 10px;
+                width: 100%; /* Ensure upload area takes full width */
+                box-sizing: border-box;
+            }
+
+            .upload-actions {
+                width: 100%;
+                justify-content: flex-end; /* Align icons to the right as in image */
+                gap: 15px;
+            }
+
+            .buttons-container {
+                flex-direction: column;
+                gap: 10px;
+                justify-content: center;
+                align-items: center;
+                margin-top: 20px; /* Slightly less margin than before */
+            }
+
+            .pay-btn,
+            .cancel-btn {
+                width: 100%; /* Buttons take full width */
+                max-width: 90%; /* Prevent stretching too much on wider mobile devices */
+                box-sizing: border-box;
+                padding: 10px 0; /* Adjust padding for full width buttons */
+            }
+        }
+
+        /* Specific adjustments for very small screens (e.g., less than 480px) */
+        @media (max-width: 480px) {
+            .header {
+                padding: 0 10px;
+                height: 55px; /* Slightly smaller header */
+            }
+            .logo {
+                width: 28px;
+                height: 28px;
+            }
+            .menu-toggle {
+                padding: 6px;
+            }
+            .menu-toggle img {
+                width: 16px;
+                height: 16px;
+            }
+            .dropdown.mobile-only-dropdown { /* Target specific dropdown for small screens */
+                font-size: 12px;
+                padding: 6px 20px 6px 8px;
+            }
+            .profile-pic {
+                width: 30px;
+                height: 30px;
+            }
+            h2 {
+                font-size: 1.2em;
+                margin-left: 0;
+            }
+            .payment-box {
+                padding: 10px;
+            }
+            label {
+                font-size: 13px;
+                margin-bottom: 5px;
+            }
+            select, input[type="text"], input[type="date"], textarea {
+                padding: 8px;
+                font-size: 13px;
+                border-radius: 6px;
+            }
+            .details-row {
+                font-size: 13px;
+                padding: 5px 0;
+            }
+            .upload-area {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+            .file-preview img {
+                width: 16px;
+                height: 16px;
+            }
+            .file-preview span {
+                font-size: 10px;
+            }
+            .icon-btn img {
+                width: 16px;
+                height: 16px;
+            }
+            .pay-btn, .cancel-btn {
+                padding: 8px 0;
+                font-size: 14px;
+                border-radius: 6px;
+            }
+            .pay-btn{
+                background-color:#205ac8;
+;
+            }
+        }
+    </style>
+</body>
+</html>

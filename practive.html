@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+</head>
+<body>
+
+<div class="header">
+        <div class="left-section">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLjX3rfIZw-1W6jrHmkDohECiQfalX4mko0p7lT77IBUgCZNC2"
+                alt="Logo" class="logo" />
+            <button class="menu-toggle" id="menuToggle">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png" alt="menu" />
+            </button>
+        </div>
+        <div class="right-section">
+            <button class="header-btn">⚙️ </button>
+            <button class="header-btn">💬</button>
+            <button class="header-btn">🔔</button>
+            <select class="dropdown">
+                <option selected>Bangalore</option>
+                <option>Mumbai</option>
+                <option>Delhi</option>
+            </select>
+            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Profile" class="profile-pic" />
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li class="active"><a href="#"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="#"><i class="fas fa-qrcode"></i>Dashboard</a></li>
+            <li class="has-submenu">
+                <button aria-expanded="false"><i class="fas fa-users"></i>Customers<span class="arrow-icon"><i
+                            class="fas fa-chevron-down"></i></span></button>
+                <ul class="submenu">
+                    <li><a href="#">View Customers</a></li>
+                    <li><a href="#">Add Customers</a></li>
+                    <li><a href="#">Upload Customers Data</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <button aria-expanded="false">
+                    <i class="far fa-file-alt"></i> Invoices
+                    <span class="arrow-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+                <ul class="submenu">
+                    <li id="BtnViewInvoice"><a href="#">View Invoices</a></li>
+                    <li><a href="#" id="addInvoiceBtn">Add Invoice</a></li>
+                    <li><a href="#" id="BtnUploadInvoice">Upload Invoice Data</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <button aria-expanded="false">
+                    <i class="fas fa-bell"></i> Reminders
+                    <span class="arrow-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="#">View Reminders</a></li>
+                    <li><a href="#" id="BtnreminderList"> Reminder List</a></li>
+                    <li><a href="#" id="BtnCreateReminder">Create Reminders</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <button aria-expanded="false">
+                    <i class="fas fa-money-check-alt"></i> EMI
+                    <span class="arrow-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="#" id="BtnEmilist"> EMI List</a></li>
+                    <li><a href="#" id="BtnViewEmi">View EMI</a></li>
+                    <li><a href="#" id="BtnADDEMI">Add EMI</a></li>
+                    <li><a href="#" id="BtnUploadEMIDATA">Upload EMI Data</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <button aria-expanded="false">
+                    <i class="fas fa-donate"></i> Payment Dashboard
+                    <span class="arrow-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="#">Payment OCR Extraction</a></li>
+                    <li><a href="#" id="BtnMakePayment">Make Payment</a></li>
+                    <li><a href="#" id="BtnReconciliation">Bank Reconciliation</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#"><i class="fas fa-id-card-alt"></i>Customer Portal</a></li>
+        </ul>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <style>
+        :root {
+            --sidebar-bg: #ffffff;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --text-color-dark: #333;
+            --text-color-light: #888;
+            --border-color: #e0e0e0;
+            --primary-color: #2563eb;
+            --primary-hover-color: #1e40af;
+            /* New colors for mobile header elements */
+            --mobile-header-icon-bg: #f5f7fa;
+            --mobile-header-icon-border: #e0e0e0;
+            --mobile-header-icon-color: #4a5568;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            padding-top: 70px;
+            display: flex;
+            transition: background-color 0.3s;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            padding: 0 30px;
+            background-color: #ffffff;
+            color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-section,
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: none;
+        }
+
+        .menu-toggle img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .header-btn {
+            background-color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            color: #2563eb;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .header-btn:hover {
+            background-color: #dbeafe;
+            transform: scale(1.05);
+        }
+
+        .dropdown {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #cdd5e1;
+            color: #2563eb;
+            font-weight: 500;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #a8c8f8;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: #ffffff;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.05);
+            overflow-y: auto;
+            z-index: 999;
+            transition: left 0.3s ease;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            position: relative;
+        }
+
+        .sidebar ul a,
+        .sidebar ul button {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            padding: 14px 25px;
+            transition: background-color 0.2s, color 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .sidebar ul button {
+            background: none;
+            border: none;
+            text-align: left;
+            justify-content: space-between;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .sidebar ul a:hover,
+        .sidebar ul button:hover {
+            background-color: #f0f4ff;
+            color: var(--primary-color);
+        }
+
+        .sidebar ul li>a i,
+        .sidebar ul li>button i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .submenu {
+            display: none;
+            background-color: #f9f9f9;
+        }
+
+        .submenu li a {
+            padding-left: 50px;
+            font-size: 14px;
+        }
+
+        .arrow-icon,
+        .arrow-icon2 {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .has-submenu button[aria-expanded="true"] .arrow-icon,
+        .has-submenu button[aria-expanded="true"] .arrow-icon2 {
+            transform: rotate(180deg);
+        }
+
+          @media (max-width: 768px){ 
+            .header {
+                padding: 0 15px; /* Smaller padding for mobile header */
+            }
+
+            .menu-toggle {
+                display: block;
+                padding: 5px; /* Add some padding around the menu icon */
+            }
+
+            .left-section .logo {
+                display: none; /* Hide logo on mobile as per image */
+            }
+
+            .header-btn {
+                padding: 8px 12px; /* Smaller padding for header buttons */
+                border-radius: 50%; /* Make chat and bell circular */
+                box-shadow: none; /* Remove shadow from these buttons */
+                background-color: var(--mobile-header-icon-bg); /* New background color */
+                border: 1px solid var(--mobile-header-icon-border); /* New border */
+                color: var(--mobile-header-icon-color); /* New icon color */
+                font-size: 1em; /* Adjust font size for consistency */
+                width: 38px; /* Fixed width for circular buttons */
+                height: 38px; /* Fixed height for circular buttons */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .header-btn:hover {
+                background-color: #e2e8f0; /* Slightly darker on hover */
+                transform: none; /* No scale transform on mobile buttons */
+            }
+
+            .header-btn:first-of-type { /* Adjust 'Generate' button specifically */
+                background-color: #e0e7ff; /* Lighter blue background */
+                color: var(--primary-color);
+                border-radius: 10px; /* More rounded rectangle */
+                width: auto; /* Auto width */
+                height: auto; /* Auto height */
+                padding: 8px 12px;
+                display: flex; /* Ensure content is centered */
+                align-items: center;
+                gap: 5px; /* Gap between icon and text */
+                border: none; /* No border for generate button */
+            }
+
+            .header-btn:first-of-type .btn-text {
+                display: block; /* Show text for 'Generate' button */
+            }
+
+            .dropdown {
+                padding: 8px 12px; /* Smaller padding for dropdown */
+                border-radius: 10px; /* More rounded corners */
+                font-size: 0.9em;
+                color: #4a5568; /* Darker text color */
+                border: 1px solid var(--mobile-header-icon-border);
+                background-color: var(--mobile-header-icon-bg);
+            }
+
+            .profile-pic {
+                width: 38px;
+                height: 38px;
+                border: 2px solid #a8c8f8; /* Keep existing border */
+            }
+
+            .left-section,
+            .right-section {
+                gap: 8px; /* Smaller gap in header */
+            }
+
+            .sidebar {
+                left: -250px;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .sidebar.open~.sidebar-overlay {
+                display: block;
+            }
+
+            
+        }
+
+        
+
+    </style>
+
+
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const submenuButtons = document.querySelectorAll('.has-submenu > button'); // Only target buttons
+
+        // Toggle sidebar on menu button click
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            document.body.classList.toggle('sidebar-open'); // Add class to body to prevent scroll
+        });
+
+        // Close sidebar when clicking on overlay
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            document.body.classList.remove('sidebar-open');
+        });
+
+        // Close sidebar on Escape key press
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                document.body.classList.remove('sidebar-open');
+            }
+        });
+
+        // Toggle submenu visibility
+        submenuButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent default button action
+                const submenu = button.nextElementSibling;
+                const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+                // Close any other open submenus
+                submenuButtons.forEach(otherButton => {
+                    if (otherButton !== button && otherButton.getAttribute('aria-expanded') === 'true') {
+                        otherButton.setAttribute('aria-expanded', 'false');
+                        otherButton.nextElementSibling.style.display = 'none';
+                    }
+                });
+
+                // Toggle current submenu
+                if (isExpanded) {
+                    submenu.style.display = 'none';
+                    button.setAttribute('aria-expanded', 'false');
+                } else {
+                    submenu.style.display = 'block';
+                    button.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+
+        // Close sidebar on window resize if it's open and screen is desktop size
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                document.body.classList.remove('sidebar-open');
+            }
+        });
+    </script>
+    
+</body>
+</html>

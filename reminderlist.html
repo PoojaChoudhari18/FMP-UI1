@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <style>
+        /* Your provided CSS will go here */
+        :root {
+            --sidebar-bg: #ffffff;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --text-color-dark: #333;
+            --text-color-light: #888;
+            --border-color: #e0e0e0;
+            --primary-color: #2563eb;
+            --primary-hover-color: #1e40af;
+            /* New colors for mobile header elements */
+            --mobile-header-icon-bg: #f5f7fa;
+            --mobile-header-icon-border: #e0e0e0;
+            --mobile-header-icon-color: #4a5568;
+
+            /* New colors for Reminder List section */
+            --card-bg: #ffffff;
+            --table-header-bg: #f8f9fa;
+            --table-border-color: #e9ecef;
+            --button-primary: #2563eb;
+            --button-primary-hover: #1e40af;
+            --button-light: #e0e7ff;
+            --button-light-hover: #c4d7ff;
+            --filter-sort-bg: #f8f9fa;
+            --filter-sort-border: #dee2e6;
+            --status-inactive: #f0f2f5;
+            --status-inactive-text: #6c757d;
+        }
+
+        /* Root variables are duplicated in your original CSS, keeping one set */
+        :root {
+            --sidebar-bg: #ffffff;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --text-color-dark: #333;
+            --text-color-light: #888;
+            --border-color: #e0e0e0;
+            --primary-color: #2563eb;
+            --primary-hover-color: #1e40af;
+            /* New colors for mobile header elements */
+            --mobile-header-icon-bg: #f5f7fa;
+            --mobile-header-icon-border: #e0e0e0;
+            --mobile-header-icon-color: #4a5568;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            padding-top: 70px;
+            display: flex;
+            transition: background-color 0.3s;
+            overflow-x: hidden; /* Prevent horizontal scrollbar on body */
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            padding: 0 30px;
+            background-color: #ffffff;
+            color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-section,
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: none;
+        }
+
+        .menu-toggle img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .header-btn {
+            background-color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            color: #2563eb;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .header-btn:hover {
+            background-color: #dbeafe;
+            transform: scale(1.05);
+        }
+
+        .dropdown {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #cdd5e1;
+            color: #2563eb;
+            font-weight: 500;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #a8c8f8;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: #ffffff;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.05);
+            overflow-y: auto;
+            z-index: 999;
+            transition: left 0.3s ease;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            position: relative;
+        }
+
+        .sidebar ul a,
+        .sidebar ul button {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            padding: 14px 25px;
+            transition: background-color 0.2s, color 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        .sidebar ul button {
+            background: none;
+            border: none;
+            text-align: left;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .sidebar ul a:hover,
+        .sidebar ul button:hover,
+        .sidebar ul li.active>a {
+            background-color: #f0f4ff;
+            color: var(--primary-color);
+        }
+
+        .sidebar ul li>a i,
+        .sidebar ul li>button i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .submenu {
+            display: none;
+            background-color: #f9f9f9;
+        }
+
+        .submenu li a {
+            padding-left: 50px;
+            font-size: 14px;
+        }
+
+        .arrow-icon {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .has-submenu button[aria-expanded="true"] .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 70px);
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex-grow: 1;
+            /* Takes up remaining space */
+            padding: 30px;
+            /* Padding around the content */
+            margin-left: 250px;
+            /* Offset for the sidebar */
+            transition: margin-left 0.3s ease;
+            box-sizing: border-box;
+            width: calc(100% - 250px);
+            /* Adjust width based on sidebar */
+            overflow-x: hidden; /* Ensure main content itself doesn't cause a scrollbar */
+        }
+
+        /* Reminder List Card */
+        .reminder-list-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            padding: 25px 30px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .card-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #343a40;
+        }
+
+        .add-reminder-btn {
+            background-color: var(--button-light);
+            color: var(--button-primary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .add-reminder-btn:hover {
+            background-color: var(--button-light-hover);
+            transform: translateY(-1px);
+        }
+
+        .add-reminder-btn i {
+            font-size: 16px;
+        }
+
+        /* Search, Filter, Sort Section */
+        .search-filter-sort {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+            /* Allow wrapping on smaller screens */
+        }
+
+        .search-box {
+            flex-grow: 1;
+            position: relative;
+            min-width: 200px;
+            /* Ensure search box has a minimum width */
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.95em;
+            color: var(--text-color-dark);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color-light);
+        }
+
+        .filter-button,
+        .sort-button {
+            padding: 12px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background-color: #fff;
+            color: var(--text-color-dark);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .filter-button i,
+        .sort-button i {
+            color: var(--primary-color);
+        }
+
+        .filter-button:hover,
+        .sort-button:hover {
+            background-color: #f0f2f5;
+            border-color: #c0c0c0;
+        }
+
+        /* Table Styling */
+        .table-container {
+            overflow-x: auto;
+            /* Enable horizontal scrolling for tables on small screens */
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .reminder-table {
+            width: 100%;
+            border-collapse: separate;
+            /* Use separate to allow border-radius on cells */
+            border-spacing: 0;
+            min-width: 700px;
+            /* Ensure table doesn't get too narrow */
+        }
+
+        .reminder-table thead th {
+            background-color: var(--table-header-bg);
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6c757d;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--table-border-color);
+            border-top: 1px solid var(--table-border-color);
+        }
+
+        .reminder-table tbody td {
+            padding: 15px 20px;
+            font-size: 15px;
+            color: #343a40;
+            border-bottom: 1px solid var(--table-border-color);
+            vertical-align: middle;
+            /* Align content vertically in middle */
+        }
+
+        /* Specific column alignments */
+        .reminder-table th:nth-child(1),
+        .reminder-table td:nth-child(1) {
+            width: 50px;
+            /* Checkbox column */
+            text-align: center;
+        }
+
+        .reminder-table th:nth-child(2),
+        .reminder-table td:nth-child(2) {
+            width: 80px;
+        }
+
+        /* ID */
+        .reminder-table th:nth-child(3),
+        .reminder-table td:nth-child(3) {
+            width: 150px;
+        }
+
+        /* Name */
+        .reminder-table th:nth-child(4),
+        .reminder-table td:nth-child(4) {
+            width: 120px;
+        }
+
+        /* Active */
+        .reminder-table th:nth-child(5),
+        .reminder-table td:nth-child(5) {
+            width: 150px;
+        }
+
+        /* Created On */
+        .reminder-table th:nth-child(6),
+        .reminder-table td:nth-child(6) {
+            width: 200px;
+        }
+
+        /* Created By */
+        .reminder-table th:nth-child(7),
+        .reminder-table td:nth-child(7) {
+            width: 50px;
+            text-align: center;
+        }
+
+        /* More */
+
+
+        .reminder-table thead th:first-child {
+            border-top-left-radius: 8px;
+        }
+
+        .reminder-table thead th:last-child {
+            border-top-right-radius: 8px;
+        }
+
+        .reminder-table tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 8px;
+        }
+
+        .reminder-table tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 8px;
+        }
+
+        .more-options-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #6c757d;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .more-options-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .status-badge.inactive {
+            background-color: var(--status-inactive);
+            color: var(--status-inactive-text);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+        }
+
+        .pagination-btn {
+            background-color: transparent;
+            border: 1px solid var(--filter-sort-border);
+            color: #495057;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .pagination-btn:hover {
+            background-color: #e9ecef;
+            border-color: #ced4da;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: transparent;
+        }
+
+        .page-number {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        /* Active/Inactive Toggle Buttons at the bottom */
+        .toggle-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            gap: 1px;
+            /* To make them appear joined */
+            border: 1px solid var(--filter-sort-border);
+            border-radius: 8px;
+            overflow: hidden; /* For rounded corners on the group */
+            width: fit-content; /* Ensure the container only takes necessary width */
+            margin-left: auto; /* Center the group */
+            margin-right: auto;
+        }
+
+        .toggle-btn {
+            background-color: var(--filter-sort-bg);
+            border: none; /* Remove individual borders */
+            color: #495057;
+            padding: 8px 15px; /* Smaller padding */
+            font-size: 14px; /* Smaller font size */
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            flex-grow: 1; /* Allow buttons to share space if needed */
+        }
+
+        .toggle-btn.active {
+            background-color: var(--button-primary);
+            color: white;
+            border-color: var(--button-primary);
+        }
+
+        .toggle-btn:hover:not(.active) {
+            background-color: #e9ecef;
+            color: #333; /* Darker text on hover for inactive buttons */
+        }
+
+        /* Remove border radius from individual buttons to create a joined effect */
+        .toggle-btn:first-child {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .toggle-btn:last-child {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+
+        .pagination-mobile {
+            display: none;
+        }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+                /* No offset when sidebar is closed on smaller screens */
+                width: auto;
+                /* Take full width */
+                padding: 20px;
+                margin-top: 80px;
+            }
+
+            .sidebar {
+                left: -250px;
+                /* Hide sidebar by default on smaller screens */
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+                /* Add shadow back for mobile slide-out */
+            }
+
+            .sidebar.open {
+                left: 0;
+                /* Slide sidebar in */
+            }
+
+            .sidebar.open+.sidebar-overlay {
+                display: block;
+                /* Show overlay when sidebar is open */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 15px;
+                /* Smaller padding for mobile header */
+            }
+
+            .menu-toggle {
+                display: block;
+                padding: 5px;
+                /* Add some padding around the menu icon */
+            }
+
+            .left-section .logo {
+                display: none;
+                /* Hide logo on mobile as per image */
+            }
+
+            .header-btn {
+                padding: 8px 12px;
+                /* Smaller padding for header buttons */
+                border-radius: 50%;
+                /* Make chat and bell circular */
+                box-shadow: none;
+                /* Remove shadow from these buttons */
+                background-color: var(--mobile-header-icon-bg);
+                /* New background color */
+                border: 1px solid var(--mobile-header-icon-border);
+                /* New border */
+                color: var(--mobile-header-icon-color);
+                /* New icon color */
+                font-size: 1em;
+                /* Adjust font size for consistency */
+                width: 38px;
+                /* Fixed width for circular buttons */
+                height: 38px;
+                /* Fixed height for circular buttons */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .header-btn:hover {
+                background-color: #e2e8f0;
+                /* Slightly darker on hover */
+                transform: none;
+                /* No scale transform on mobile buttons */
+            }
+
+            .header-btn:first-of-type {
+                /* Adjust 'Generate' button specifically */
+                background-color: #e0e7ff;
+                /* Lighter blue background */
+                color: var(--primary-color);
+                border-radius: 10px;
+                /* More rounded rectangle */
+                width: auto;
+                /* Auto width */
+                height: auto;
+                /* Auto height */
+                padding: 8px 12px;
+                display: flex;
+                /* Ensure content is centered */
+                align-items: center;
+                gap: 5px;
+                /* Gap between icon and text */
+                border: none;
+                /* No border for generate button */
+            }
+
+            .header-btn:first-of-type .btn-text {
+                display: block;
+                /* Show text for 'Generate' button */
+            }
+
+            .dropdown {
+                padding: 8px 12px;
+                /* Smaller padding for dropdown */
+                border-radius: 10px;
+                /* More rounded corners */
+                font-size: 0.9em;
+                color: #4a5568;
+                /* Darker text color */
+                border: 1px solid var(--mobile-header-icon-border);
+                background-color: var(--mobile-header-icon-bg);
+            }
+
+            .profile-pic {
+                width: 38px;
+                height: 38px;
+                border: 2px solid #a8c8f8;
+                /* Keep existing border */
+            }
+
+            .left-section,
+            .right-section {
+                gap: 8px;
+                /* Smaller gap in header */
+            }
+
+                       .sidebar {
+                left: -250px;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .sidebar.open~.sidebar-overlay {
+                display: block;
+            }
+
+            .card-header {
+                flex-direction: column;
+                /* Stack header items */
+                align-items: flex-start;
+                /* Align to left */
+                gap: 15px;
+                /* Space between title and button */
+                margin-top: 10px;
+            }
+
+                       .search-filter-sort {
+                flex-direction: row;
+                /* Change to row for horizontal layout */
+                align-items: center;
+                /* Align items vertically in the center */
+                justify-content: space-between;
+                /* Distribute space between items */
+                gap: 5px;
+                /* Keep a small gap */
+            }
+
+            .search-box {
+                flex-grow: 1;
+                /* Allow search box to grow and take available space */
+                width:20px;
+                /* Remove min-width to allow shrinking on small screens */
+            }
+
+            .filter-button {
+                /* Removed margin-left: 6%; */
+                width: 45px; /* Fixed width for icon-only button */
+                height: 45px; /* Fixed height for icon-only button */
+                padding: 0; /* Remove padding as content is icon */
+                justify-content: center;
+                font-size: 0; /* Hides the text */
+                flex-shrink: 0; /* Prevent shrinking */
+            }
+
+            .sort-button {
+                width: 45px; /* Fixed width for icon-only button */
+                height: 45px; /* Fixed height for icon-only button */
+                padding: 0; /* Remove padding as content is icon */
+                justify-content: center;
+                font-size: 0; /* Hides the text */
+                flex-shrink: 0; /* Prevent shrinking */
+            }
+
+            .filter-button i,
+            .sort-button i {
+                font-size: 18px;
+                /* Keep icon size visible */
+                margin: 0;
+                /* Remove any margin */
+            }
+
+            .filter-button span,
+            .sort-button span {
+                display: none; /* Explicitly hide the text */
+            }
+
+
+            /* Table Responsive */
+            .table-container {
+                /* overflow-x: auto; is already on this */
+                min-width: unset;
+                /* Allow table to shrink, but it will overflow */
+                font-weight: bold;
+            }
+
+            /* /* You might consider turning table rows into cards on very small screens,
+            but for this example, horizontal scroll is maintained for simplicity. */
+            /* .reminder-table thead { */
+                /* Hide table headers on smaller screens if you convert to cards */
+                /* display: none; */
+            /* } */
+
+            /* .reminder-table tbody tr { */
+                /* display: block; allows treating rows as blocks/cards */
+                /* margin-bottom: 15px; */
+                /* background-color: #fff; */
+                /* border-radius: 8px; */
+                /* box-shadow: 0 2px 8px rgba(0,0,0,0.05); */
+            /* } */
+
+            /* .reminder-table td { */
+                /* display: block; transform cells to block elements */
+                /* text-align: right; */
+                /* padding-left: 50%; */
+                /* position: relative; */
+            /* } */
+
+            /* .reminder-table td::before { */
+                /* content: attr(data-label); /* Show original header as pseudo-element */
+                /* position: absolute; */
+                /* left: 10px; */
+                /* width: 45%; */
+                /* padding-right: 10px; */
+                /* white-space: nowrap; */
+                /* text-align: left; */
+                /* font-weight: 600; */
+                /* color: #6c757d; */
+            /* } */ */
+
+            .pagination {
+                display: none;
+            }
+
+            .pagination-mobile {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                margin-top: 20px;
+            }
+
+            .pagination-mobile .pagination-button {
+                padding: 8px 12px;
+                border-radius: 8px;
+                border: 1px solid var(--border-color);
+                background-color: #fff;
+                color: var(--text-color-dark);
+                font-weight: 600;
+                cursor: pointer;
+            }
+
+            .pagination-mobile .active-page {
+                background-color: #e0e7ff;
+                color: #333;
+                font-weight: 600;
+                width: 35px;
+                height: 35px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 8px;
+            }
+
+
+            .page-numbers {
+                order: 0;
+                margin-top: 0;
+                flex-wrap: nowrap;
+                /* Prevent page numbers from wrapping */
+                overflow-x: auto;
+                /* Allow horizontal scrolling if numbers overflow */
+                -webkit-overflow-scrolling: touch;
+                justify-content: flex-start;
+                /* Align numbers to the start of the container */
+                gap: 5px;
+            }
+
+            .page-numbers span {
+                min-width: 30px;
+                height: 30px;
+                font-size: 0.85em;
+                flex-shrink: 0;
+            }
+
+            /* --- END OF RESPONSIVE PAGINATION CHANGES --- */
+
+            /* Mobile specific adjustments for toggle buttons */
+            .toggle-buttons {
+                flex-direction: row; /* Keep them in a row on mobile */
+                width: fit-content;
+                /* Allow width to adjust to content */
+                margin-top: 30px; /* Adjust top margin for mobile */
+            }
+
+            .toggle-btn {
+                width: auto; /* Remove 100% width on mobile */
+                padding: 8px 15px; /* Adjust padding for smaller size */
+                font-size: 13px; /* Smaller font size for mobile */
+            }
+
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0px; /* Remove padding from body on very small screens */
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .reminder-list-card {
+                padding: 20px;
+            }
+   .search-box input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.95em;
+            color: var(--text-color-dark);
+        }
+
+          
+        }
+
+        /* Prevent body scroll when sidebar is open on mobile */
+        body.sidebar-open {
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="left-section">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLjX3rfIZw-1W6jrHmkDohECiQfalX4mko0p7lT77IBUgCZNC2"
+                alt="Logo" class="logo" />
+            <button class="menu-toggle" id="menuToggle">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png" alt="menu" />
+            </button>
+        </div>
+        <div class="right-section">
+            <button class="header-btn">⚙️ </button>
+            <button class="header-btn">💬</button>
+            <button class="header-btn">🔔</button>
+            <select class="dropdown">
+                <option selected>Bangalore</option>
+                <option>Mumbai</option>
+                <option>Delhi</option>
+            </select>
+            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Profile" class="profile-pic" />
+        </div>
+    </div>
+
+   <div class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="welcomepage.html"><i class="fas fa-home" id="BtnHome"></i>Home</a></li>
+            <li><a href="#"><i class="fas fa-qrcode" id="BtnDashboard"></i>Dashboard</a></li>
+                     <li><a href="contract.html"><i class="fas fa-qrcode" id="Btncontract"></i>Contract</a></li>
+
+            <li class="has-submenu">
+                <button aria-expanded="false"><i class="fas fa-users"></i>Customers<span class="arrow-icon"><i
+                                class="fas fa-chevron-down"></i></span></button>
+                <ul class="submenu">
+                    <li><a href="customersummary.html">View Customers</a></li>
+                    <li><a href="addcustomer.html" id="addcustomerBtn">Add Customers</a></li>
+                    <li><a href="uploadorg.html" id="">Upload Customers Data</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <button aria-expanded="false">
+                    <i class="far fa-file-alt"></i> Invoices
+                    <span class="arrow-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+                <ul class="submenu">
+                    <li id=""><a href="yourinvoice.html">Your Invoices</a></li>
+                    <li id=""><a href="viewinvoice.html">View Invoices</a></li>
+                    <li><a href="addinvoice.html">Add Invoice</a></li>
+                    <li><a href="uploadorg.html" id="">Upload Invoice Data</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <button aria-expanded="false">
+                    <i class="fas fa-bell"></i> Reminders
+                    <span class="arrow-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+                <ul class="submenu">
+                    <!-- <li><a href="">View Reminders</a></li> -->
+                    <li><a href="reminderlist.html" id="BtnreminderList"> Reminder List</a></li>
+                    <li><a href="createremider.html" id="BtnCreateReminder">Create Reminders</a></li>
+                </ul>
+            </li>
+
+            <!-- <li class="has-submenu">
+                <button aria-expanded="false">
+                    <i class="fas fa-money-check-alt"></i> EMI
+                    <span class="arrow-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="emilist.html" id="BtnEmilist"> EMI List</a></li>
+                    <li><a href="viewemi.html" id="BtnViewEmi">View EMI</a></li>
+                    <li><a href="addemi.html" id="BtnADDEMI">Add EMI</a></li>
+                    <li><a href="uploadorg.html" id="BtnUploadEMIDATA">Upload EMI Data</a></li>
+                </ul>
+            </li> -->
+
+            <li class="has-submenu">
+                <button aria-expanded="false">
+                    <i class="fas fa-donate"></i> Payment Dashboard
+                    <span class="arrow-icon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="#">Payment OCR Extraction</a></li>
+                    <li><a href="trackpayment.html" id="BtnMakePayment">Track You Payment</a></li>
+
+                    <li><a href="payment.html" id="BtnMakePayment">Make Payment</a></li>
+                    <li><a href="reconciliation.html" id="BtnReconciliation">Bank Reconciliation</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#"><i class="fas fa-id-card-alt"></i>Customer Portal</a></li>
+        </ul>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="main-content">
+        <div class="reminder-list-card">
+            <div class="card-header">
+                <h2>Reminder list</h2>
+                <button class="add-reminder-btn" id="addreminderBtn">
+                    <i class="fas fa-plus"></i>
+                    <span>Add Reminder</span>
+                </button>
+            </div>
+
+          <div class="search-filter-sort">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search" aria-label="Search customers" />
+                </div>
+                <button class="filter-button">
+                    <i class="fas fa-filter"></i><span>Filter</span>
+                </button>
+                <button class="sort-button">
+                    <i class="fas fa-sort-amount-down"></i><span>Sort</span>
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table class="reminder-table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>ID</th>
+                            <th>NAME</th>
+                            <th>ACTIVE</th>
+                            <th>CREATED ON</th>
+                            <th>CREATED BY</th>
+                            <th>MORE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>183</td>
+                            <td>FMP</td>
+                            <td><span class="status-badge inactive">Inactive</span></td>
+                            <td>21-04-2025</td>
+                            <td>khushi@bizlemdigital.com</td>
+                            <td>
+                                <button class="more-options-btn">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>184</td>
+                            <td>Business</td>
+                            <td><span class="status-badge inactive">Inactive</span></td>
+                            <td>21-04-2025</td>
+                            <td>khushi@bizlemdigital.com</td>
+                            <td>
+                                <button class="more-options-btn">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <button class="pagination-btn" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <div class="page-number">1</div>
+                <button class="pagination-btn">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            <div class="pagination-mobile">
+                <button class="pagination-button"><i class="fas fa-chevron-left"></i></button>
+                <div class="page-numbers">
+                    <span class="active-page">1</span>
+                </div>
+                <button class="pagination-button"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="toggle-buttons">
+                <button class="toggle-btn">Inactive</button>
+                <button class="toggle-btn active">Active</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        addreminderBtn
+          document.getElementById("addreminderBtn").addEventListener("click", function () {
+    window.location.href = "createremider.html";
+});
+    </script>
+     <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const submenuButtons = document.querySelectorAll('.has-submenu > button'); // Only target buttons
+
+        // Toggle sidebar on menu button click
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            document.body.classList.toggle('sidebar-open'); // Add class to body to prevent scroll
+        });
+
+        // Close sidebar when clicking on overlay
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            document.body.classList.remove('sidebar-open');
+        });
+
+        // Close sidebar on Escape key press
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                document.body.classList.remove('sidebar-open');
+            }
+        });
+
+        // Toggle submenu visibility
+        submenuButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent default button action
+                const submenu = button.nextElementSibling;
+                const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+                // Close any other open submenus
+                submenuButtons.forEach(otherButton => {
+                    if (otherButton !== button && otherButton.getAttribute('aria-expanded') === 'true') {
+                        otherButton.setAttribute('aria-expanded', 'false');
+                        otherButton.nextElementSibling.style.display = 'none';
+                    }
+                });
+
+                // Toggle current submenu
+                if (isExpanded) {
+                    submenu.style.display = 'none';
+                    button.setAttribute('aria-expanded', 'false');
+                } else {
+                    submenu.style.display = 'block';
+                    button.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+
+        // Close sidebar on window resize if it's open and screen is desktop size
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                document.body.classList.remove('sidebar-open');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Whatsapp Preview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* General Resets and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif; /* Changed to Inter for consistency */
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            background: #f9fafb; /* Desktop background */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header Styles --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            padding: 0 20px;
+            background-color: #ffffff;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            position: fixed; /* Fixed for desktop */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        /* Hide mobile header by default (desktop first) */
+        .header.mobile-header {
+            display: none;
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            height: 30px;
+            width: auto;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0; /* Removed padding to let image size dictate */
+        }
+
+        .menu-toggle img {
+            height: 20px;
+            width: 20px;
+            display: block;
+        }
+
+        /* Desktop Header Buttons */
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #e6f0ff;
+            color: #2563eb;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: 500;
+            justify-content: center;
+            transition: all 0.3s ease;
+            white-space: nowrap; /* Prevents text from wrapping */
+        }
+
+        .header-btn:hover {
+            background-color: #dbeafe;
+        }
+
+        /* Desktop Location Dropdown */
+        .dropdown.desktop-location-dropdown {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: white;
+            color: #333;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%20197.3L159.2%2069.5c-3.2-3.2-8.3-3.2-11.6%200L5.4%20197.3c-3.2%203.2-3.2%208.3%200%2011.6l11.6%2011.6c3.2%203.2%208.3%203.2%2011.6%200L148.4%20128.5l119.8%20119.8c3.2%203.2-8.3%203.2-11.6%200l11.6-11.6c3.2-3.3%203.2-8.4%200-11.6z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+            padding-right: 25px;
+        }
+
+        .profile-pic {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Mobile-specific header elements (hidden by default) */
+        .header-icon-btn {
+            display: none; /* Hide on desktop */
+            background-color: transparent;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: #888;
+            font-size: 20px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+        .mobile-location-dropdown-container {
+            display: none; /* Hidden by default */
+                        /* border: 1px solid gray; */
+
+            width: 100%;
+            /* background-color: #ffffff; */
+            padding: 10px 15px 0; /* Adjusted padding for mobile */
+            /* box-sizing: border-box; */
+            /* border-bottom: 1px solid #e0e0e0; */
+            /* box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); */
+            justify-content: center;
+        }
+        .mobile-location-dropdown-container .dropdown {
+            width: 100%;
+            max-width: 400px;
+            color: blue; /* Changed to #333 for consistency */
+            background-color: #e6f0ff; /* Light blue background */
+            /* background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232563eb%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.1L146.2%20202.7%2018.5%2074.5a17.6%2017.6%200%200%200-25.1%2024.5l137.9%20137.7a17.6%2017.6%200%200%200%2025.1%200l137.9-137.7a17.6%2017.6%200%200%200-13-29.6z%22%2F%3E%3C%2Fsvg%3E'); */
+            /* background-position: right 10px center; */
+            background-size: 12px;
+            padding-right: 25px;
+            padding: 5px 10px; /* Smaller padding for mobile dropdown */
+            border: none; /* Remove border from mobile dropdown */
+        }
+
+        /* --- Main Content Area (Responsive) --- */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: row; /* Desktop: side-by-side */
+            width: 100%;
+            background: #f9fafb;
+            padding: 20px;
+            gap: 20px;
+            overflow-y: auto;
+            padding-top: 80px; /* Adjusted for 60px header + some spacing */
+        }
+
+        .left-panel {
+            flex: 1;
+            max-width: 500px; /* Keep max width for form */
+            padding: 0;
+            background: transparent;
+            border-right: none;
+            box-shadow: none;
+            border-radius: 0;
+        }
+
+        .right-panel {
+            flex: 1;
+            max-width: 500px; /* Keep max width for preview */
+            padding: 0;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Input Section Styling */
+        .input-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+        input[type="text"]::placeholder {
+            color: #999;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+            margin-bottom: 0;
+            color: #555;
+        }
+
+        .radio-group input[type="radio"] {
+            width: auto;
+            margin-bottom: 0;
+            accent-color: #2563eb;
+        }
+
+        .colors {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .color-input-group {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .color-box {
+            padding: 8px 10px;
+            border-radius: 4px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* WhatsApp Preview Section Styling */
+        .preview-section {
+            padding: 0; /* Adjusted from 20px */
+            border-radius: 0; /* Adjusted from 8px */
+            box-shadow: none; /* Adjusted from shadow */
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .preview-section h3 { /* Renamed from .preview h3 */
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .preview-content { /* Renamed from .preview */
+            background-color: #e5ddd5; /* WhatsApp chat background */
+            padding: 20px 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05); /* Added shadow */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center the chat bubble */
+            flex: 1; /* Make it fill available space */
+        }
+
+        .preview-content h5 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #555;
+            font-size: 16px; /* Adjusted font size */
+        }
+
+        .chat-bubble {
+            background-color: #dcf8c6; /* WhatsApp outgoing message bubble color */
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            max-width: 90%; /* Adjust max-width for responsiveness */
+            width: fit-content; /* Allow bubble to shrink wrap content */
+            align-self: flex-end; /* Align to the right for "You" messages */
+            box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+            line-height: 1.4; /* Added line-height */
+        }
+
+        .chat-bubble h4 {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 5px;
+            color: #1a1a1a;
+            font-weight: normal; /* Ensure normal weight for main text */
+        }
+
+        .chat-bubble h4 strong { /* For the "Invoice Summary" bold text */
+            font-weight: bold;
+            color: inherit; /* Inherit color from parent */
+        }
+
+        .chat-bubble h4 span {
+            font-weight: normal;
+            color: #000;
+        }
+
+        .chat-bubble a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        
+        .chat-bubble a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Bottom Buttons (Consistent with Email/WhatsApp) --- */
+        .bottom-buttons {
+            height: 60px; /* Reduced from 70px to match WhatsApp/Email */
+            background: white;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
+            padding: 0 20px; /* Reduced padding to match WhatsApp/Email */
+            flex-shrink: 0;
+            position: fixed; /* Fixed at bottom for desktop */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 8px 16px; /* Reduced padding to match WhatsApp/Email */
+            border: none;
+            border-radius: 5px;
+            font-size: 14px; /* Reduced font size to match WhatsApp/Email */
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            width: auto;
+        }
+
+        .save {
+            background: #2563eb;
+            color: white;
+        }
+
+        .save:hover {
+            background-color: #1d4ed8;
+        }
+
+        .close {
+            background: white;
+            border: 1px solid #2563eb;
+            color: #2563eb;
+        }
+
+        .close:hover {
+            background-color: #f0f4ff;
+        }
+
+        /* --- Media Queries for Mobile Layout (Apply styles below 768px) --- */
+        @media (max-width: 768px) {
+            body {
+                justify-content: flex-start; /* Align to top on mobile */
+                align-items: center;
+                overflow-y: auto; /* Allow body to scroll */
+                background-color: #EAF2FE; /* Mobile background */
+            }
+
+            .container {
+                width: 100%;
+                max-width: 480px; /* Fixed max-width for phone screen simulation */
+                height: auto; /* Allow height to adjust */
+                min-height: 100vh; /* Ensure container takes full screen height on mobile */
+                background: #f9fafb;
+                border-radius: 0; /* No border-radius for full screen mobile */
+                box-shadow: none; /* No shadow for full screen mobile */
+                padding: 0; /* Remove container padding */
+            }
+
+            /* Header adjustments for mobile */
+            .header.desktop-header {
+                display: none; /* Hide desktop header */
+            }
+            .header.mobile-header {
+                display: flex; /* Show mobile header */
+                position: static; /* Not fixed relative to body on mobile */
+                box-shadow: none; /* No shadow */
+                border-bottom: none;
+                height: 50px; /* Adjusted height */
+                padding: 0 15px;
+            }
+
+            .header.mobile-header .left-section {
+                gap: 10px;
+            }
+            .header.mobile-header .logo {
+                height: 24px;
+            }
+            .header.mobile-header .menu-toggle img {
+                height: 20px;
+                width: 20px;
+                filter: brightness(0.5); /* Darker icon */
+            }
+
+            .header.mobile-header .right-section {
+                gap: 10px; /* Adjusted gap for mobile header icons */
+            }
+            .header-btn { /* Hide desktop-specific header buttons */
+                display: none;
+            }
+            .header-icon-btn { /* Show mobile header icons */
+                display: flex;
+                background-color: transparent;
+                color: #888; /* Softer icon color */
+                font-size: 18px;
+                padding: 8px;
+            }
+            .profile-pic {
+                height: 35px;
+                width: 35px;
+                border: 2px solid #fff;
+                box-shadow: 0 0 0 2px #d0e0ff; /* Light blue halo */
+            }
+
+            /* Mobile dropdown below header */
+            .mobile-location-dropdown-container {
+                display: flex; /* Show this wrapper on mobile */
+                padding: 10px 15px 0; /* Match header horizontal padding */
+                background: white;
+                /* border-bottom: 1px solid #eee; */
+            }
+            .dropdown.desktop-location-dropdown {
+                display: none; /* Hide desktop dropdown */
+            }
+            .dropdown.mobile-location-dropdown {
+                display: block; /* Show mobile dropdown */
+            }
+
+            .main {
+                flex-direction: column; /* Stack panels vertically */
+                padding: 10px; /* Reduced padding for mobile main */
+                gap: 15px; /* Adjusted gap for mobile */
+                overflow-y: auto;
+                padding-top: 20px; /* Remove top padding as header is not fixed relative to body */
+            }
+
+            .left-panel, .right-panel {
+                max-width: 100%;
+                padding: 0; /* Panels directly in main, no extra padding needed */
+            }
+            .input-section, .preview-content {
+                padding: 15px; /* Inner padding for sections on mobile */
+            }
+
+            input[type="text"], select {
+                padding: 12px; /* Larger padding for touch targets */
+                font-size: 16px; /* Larger font size for readability */
+            }
+            .radio-group {
+                flex-direction: column; /* Stack radio buttons */
+                gap: 10px;
+            }
+            .radio-group label {
+                font-size: 15px;
+            }
+            .colors {
+                flex-direction: column; /* Stack color inputs */
+                gap: 10px;
+            }
+            .color-input-group {
+                min-width: unset;
+                width: 100%;
+            }
+
+            .preview-section h3 { /* Renamed from .preview h3 */
+                font-size: 16px;
+            }
+            .preview-content h5 { /* For the 'WhatsApp Chat' heading within the preview content */
+                font-size: 15px;
+                text-align: center; /* Center the heading */
+                margin-bottom: 10px;
+                color: #444;
+            }
+            .chat-bubble {
+                max-width: 95%; /* More width on small screens */
+                font-size: 13px;
+                padding: 12px;
+            }
+            .chat-bubble h4 {
+                font-size: 13px;
+            }
+
+            /* Bottom Buttons adjustments for mobile */
+            .bottom-buttons {
+                position: static; /* Not fixed relative to body on mobile */
+                height: auto;
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px 20px;
+            }
+
+            button {
+                width: 100%;
+                padding: 12px 20px;
+                border-radius: 8px;
+                font-size: 16px;
+            }
+        }
+
+        /* Adjust main content when the container is in desktop view */
+        @media (min-width: 769px) {
+            .main {
+                max-width: 1200px;
+                margin: 20px auto;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+                padding: 20px;
+            }
+
+            .left-panel .input-section,
+            .right-panel .preview-section {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            .left-panel, .right-panel {
+                background: transparent;
+                padding: 0;
+            }
+            .preview-section .preview-content {
+                box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            }
+
+            .mobile-location-dropdown-container { /* Hide this wrapper on desktop */
+                display: none;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .main {
+                padding: 30px;
+            }
+            .left-panel, .right-panel {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+<div class="header">
+        <div class="left-section">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLjX3rfIZw-1W6jrHmkDohECiQfalX4mko0p7lT77IBUgCZNC2"
+                alt="Logo" class="logo" />
+            <button class="menu-toggle" id="menuToggle">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png" alt="menu" />
+            </button>
+        </div>
+        <div class="right-section">
+            <button class="header-btn">⚙️ </button>
+            <button class="header-btn">💬</button>
+            <button class="header-btn">🔔</button>
+            <select class="dropdown">
+                <option selected>Bangalore</option>
+                <option>Mumbai</option>
+                <option>Delhi</option>
+            </select>
+            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Profile" class="profile-pic" />
+        </div>
+    </div>
+
+    
+
+
+    <style>
+        :root {
+            --sidebar-bg: #ffffff;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --text-color-dark: #333;
+            --text-color-light: #888;
+            --border-color: #e0e0e0;
+            --primary-color: #2563eb;
+            --primary-hover-color: #1e40af;
+            /* New colors for mobile header elements */
+            --mobile-header-icon-bg: #f5f7fa;
+            --mobile-header-icon-border: #e0e0e0;
+            --mobile-header-icon-color: #4a5568;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            padding-top: 70px;
+            display: flex;
+            transition: background-color 0.3s;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            padding: 0 30px;
+            background-color: #ffffff;
+            color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-section,
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: none;
+        }
+
+        .menu-toggle img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .header-btn {
+            background-color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            color: #2563eb;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .header-btn:hover {
+            background-color: #dbeafe;
+            transform: scale(1.05);
+        }
+
+        .dropdown {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #cdd5e1;
+            color: #2563eb;
+            font-weight: 500;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #a8c8f8;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: #ffffff;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.05);
+            overflow-y: auto;
+            z-index: 999;
+            transition: left 0.3s ease;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            position: relative;
+        }
+
+        .sidebar ul a,
+        .sidebar ul button {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            padding: 14px 25px;
+            transition: background-color 0.2s, color 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .sidebar ul button {
+            background: none;
+            border: none;
+            text-align: left;
+            justify-content: space-between;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .sidebar ul a:hover,
+        .sidebar ul button:hover {
+            background-color: #f0f4ff;
+            color: var(--primary-color);
+        }
+
+        .sidebar ul li>a i,
+        .sidebar ul li>button i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .submenu {
+            display: none;
+            background-color: #f9f9f9;
+        }
+
+        .submenu li a {
+            padding-left: 50px;
+            font-size: 14px;
+        }
+
+        .arrow-icon,
+        .arrow-icon2 {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .has-submenu button[aria-expanded="true"] .arrow-icon,
+        .has-submenu button[aria-expanded="true"] .arrow-icon2 {
+            transform: rotate(180deg);
+        }
+
+          @media (max-width: 768px){ 
+            .header {
+                padding: 0 15px; /* Smaller padding for mobile header */
+            }
+
+            .menu-toggle {
+                display: block;
+                padding: 5px; /* Add some padding around the menu icon */
+            }
+
+            .left-section .logo {
+                display: none; /* Hide logo on mobile as per image */
+            }
+
+            .header-btn {
+                padding: 8px 12px; /* Smaller padding for header buttons */
+                border-radius: 50%; /* Make chat and bell circular */
+                box-shadow: none; /* Remove shadow from these buttons */
+                background-color: var(--mobile-header-icon-bg); /* New background color */
+                border: 1px solid var(--mobile-header-icon-border); /* New border */
+                color: var(--mobile-header-icon-color); /* New icon color */
+                font-size: 1em; /* Adjust font size for consistency */
+                width: 38px; /* Fixed width for circular buttons */
+                height: 38px; /* Fixed height for circular buttons */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .header-btn:hover {
+                background-color: #e2e8f0; /* Slightly darker on hover */
+                transform: none; /* No scale transform on mobile buttons */
+            }
+
+            .header-btn:first-of-type { /* Adjust 'Generate' button specifically */
+                background-color: #e0e7ff; /* Lighter blue background */
+                color: var(--primary-color);
+                border-radius: 10px; /* More rounded rectangle */
+                width: auto; /* Auto width */
+                height: auto; /* Auto height */
+                padding: 8px 12px;
+                display: flex; /* Ensure content is centered */
+                align-items: center;
+                gap: 5px; /* Gap between icon and text */
+                border: none; /* No border for generate button */
+            }
+
+            .header-btn:first-of-type .btn-text {
+                display: block; /* Show text for 'Generate' button */
+            }
+
+            .dropdown {
+                padding: 8px 12px; /* Smaller padding for dropdown */
+                border-radius: 10px; /* More rounded corners */
+                font-size: 0.9em;
+                color: #4a5568; /* Darker text color */
+                border: 1px solid var(--mobile-header-icon-border);
+                background-color: var(--mobile-header-icon-bg);
+            }
+
+            .profile-pic {
+                width: 38px;
+                height: 38px;
+                border: 2px solid #a8c8f8; /* Keep existing border */
+            }
+
+            .left-section,
+            .right-section {
+                gap: 8px; /* Smaller gap in header */
+            }
+
+            .sidebar {
+                left: -250px;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .sidebar.open~.sidebar-overlay {
+                display: block;
+            }
+
+            
+        }
+
+        
+
+    </style>
+
+    
+    <!-- Mobile Location Dropdown (moved outside mobile-header for full width) -->
+    
+
+    <div class="main">
+        <div class="left-panel">
+            <div class="input-section">
+                <label for="category">Category*</label>
+                <select id="category"><option>Select category</option></select>
+
+                <label>Reminder type*</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="reminderType" value="email" id="Btnemail"> Email</label>
+                    <label><input type="radio" name="reminderType" value="sms" id="Btnsms"> SMS</label>
+                    <label><input type="radio" name="reminderType" value="whatsapp" checked> WhatsApp</label>
+                </div>
+
+                <label for="templateName">Template name*</label>
+                <input type="text" id="templateName" placeholder="Enter name" maxlength="20" />
+                <div style="font-size: 12px; color: #777; margin-top: -10px; margin-bottom: 15px;">Max 20 characters</div>
+
+                <label for="subjectLine">Subject line*</label>
+                <input type="text" id="subjectLine" placeholder="Enter subject line" />
+
+                <div class="colors">
+                    <div class="color-input-group">
+                        <label for="headerTextColor">Header text color</label>
+                        <input type="text" id="headerTextColor" value="#1a2258" />
+                        <div class="color-box" id="headerTextColorDisplay" style="background: #1a2258">#1a2258</div>
+                    </div>
+                    <div class="color-input-group">
+                        <label for="backgroundColor">Background color</label>
+                        <input type="text" id="backgroundColor" value="#22c55e" />
+                        <div class="color-box" id="backgroundColorDisplay" style="background: #22c55e">#22c55e</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="preview-section">
+                <h3 class="preview-heading">WhatsApp Preview</h3>
+                <div class="preview-content">
+                    <h5>WhatsApp Chat</h5>
+                    
+                    <div class="chat-bubble" id="chatBubble">
+                        <h4>Hello John, <br><br>We hope this message finds you well. This is a friendly reminder that<br> your invoice is due for payment.<br><br></h4>
+                        <h4><strong>Invoice Summary</strong></h4>
+                        <h4>Invoice Number: <span style="color:#000;">#INV-2024-001</span></h4>
+                        <h4>Date: <span style="color:#000;">Mar 15, 2024</span></h4>
+                        <h4>Amount Due: <span style="color:#000;">$1,250.00</span></h4>
+                        <h4>Total Due: <span style="color:#000;">$1,250.00</span></h4>
+                        <h4>Please process the payment at your earliest convenience. If you have any questions, feel free to contact us.</h4><br>
+                        <h4>Best Regards,<br></h4>
+                        <h4>Your Company Team <a href="https://invoice.link/123" target="_blank">https://invoice.link/123</a></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-buttons">
+        <button class="close">Close</button>
+        <button class="save">Save</button>
+    </div>
+
+    <script>
+        document.getElementById("Btnsms").addEventListener("click", function(){
+            window.location.href = "smspreview.html";
+        });
+
+        document.getElementById("Btnemail").addEventListener("click", function(){
+            window.location.href = "emialpreview.html";
+        });
+
+        const headerTextColorInput = document.getElementById('headerTextColor');
+        const headerTextColorDisplay = document.getElementById('headerTextColorDisplay');
+        const backgroundColorInput = document.getElementById('backgroundColor');
+        const backgroundColorDisplay = document.getElementById('backgroundColorDisplay');
+        const chatBubble = document.getElementById('chatBubble');
+
+        function updateColors() {
+            const headerText = headerTextColorInput.value;
+            const background = backgroundColorInput.value;
+
+            headerTextColorDisplay.style.background = headerText;
+            headerTextColorDisplay.textContent = headerText;
+            
+            backgroundColorDisplay.style.background = background;
+            backgroundColorDisplay.textContent = background;
+
+            // Update WhatsApp chat bubble background and text color
+            chatBubble.style.backgroundColor = background;
+            chatBubble.style.color = headerText; // Apply to the main text of the bubble
+            
+            // Optionally, adjust color for inner spans if needed, e.g., if you want black text always
+            const spans = chatBubble.querySelectorAll('span');
+            spans.forEach(span => {
+                if (span.style.color === 'rgb(0, 0, 0)') { // Check for the specific black color
+                    span.style.color = '#000'; // Keep it black
+                } else {
+                    span.style.color = headerText; // Apply header text color
+                }
+            });
+            // Ensure link color remains distinct or as desired
+            const links = chatBubble.querySelectorAll('a');
+            links.forEach(link => {
+                link.style.color = '#2563eb'; // Example: keep links blue
+            });
+        }
+
+        headerTextColorInput.addEventListener('input', updateColors);
+        backgroundColorInput.addEventListener('input', updateColors);
+
+        // Initial update
+        updateColors();
+    </script>
+</body>
+</html>

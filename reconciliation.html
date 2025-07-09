@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Reconciliation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* Global styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            /* overflow: hidden;  Removing this would allow overall page scroll */
+            background-color: #f9fafc;
+        }
+
+        /* Variables for consistent styling */
+                :root {
+            --sidebar-bg: #ffffff;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --text-color-dark: #333;
+            --text-color-light: #888;
+            --border-color: #e0e0e0;
+            --primary-color: #2563eb;
+            --primary-hover-color: #1e40af;
+            /* New colors for mobile header elements */
+            --mobile-header-icon-bg: #f5f7fa;
+            --mobile-header-icon-border: #e0e0e0;
+            --mobile-header-icon-color: #4a5568;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            padding-top: 70px;
+            display: flex;
+            transition: background-color 0.3s;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            padding: 0 30px;
+            background-color: #ffffff;
+            color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-section,
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: none;
+        }
+
+        .menu-toggle img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .header-btn {
+            background-color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            color: #2563eb;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .header-btn:hover {
+            background-color: #dbeafe;
+            transform: scale(1.05);
+        }
+
+        .dropdown {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #cdd5e1;
+            color: #2563eb;
+            font-weight: 500;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #a8c8f8;
+        }
+
+        /* Main container and box */
+        .container {
+            padding: 10px;
+            height: calc(100vh - 70px); /* Adjusted for header height */
+            overflow: hidden; /* This might still hide parts of the table if it's too wide */
+            width: 100%;
+        }
+
+        .box {
+            background: var(--bg-white);
+            border-radius: 10px;
+            padding: 10px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Enable scrolling for the content inside the box */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: #2f73f2;
+            margin-bottom: 20px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        select, input[type="date"], input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 100%;
+        }
+
+        .reconcile-box {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .reconcile-box .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .reconcile-box .row > div {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .reconcile-box input {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .diff {
+            color: red;
+            font-weight: bold;
+        }
+
+        .search-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 8px 5px;
+            background-color: var(--bg-white);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+        }
+
+        .search-section i {
+            color: #888;
+            font-size: 16px;
+        }
+
+        .search-section input[type="text"] {
+            flex: 1;
+            padding: 8px 0;
+            border-radius: 0;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            background: var(--bg-white);
+        }
+
+        .btn-outline {
+            background: var(--bg-white);
+            border: 1px solid #ccc;
+            color: var(--text-color);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-outline i {
+            font-size: 14px;
+        }
+
+        .btn-outline:hover {
+            background-color: #f0f0f0;
+            border-color: var(--primary-blue);
+        }
+
+        /* Responsive table wrapper */
+        .table-responsive {
+            /* Removed overflow-x: auto; */
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 700px; /* This will make the table wider than small screens */
+        }
+
+        thead th {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 15px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tbody td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+            color: #444;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background-color: #fcfdff;
+        }
+
+        tbody td img {
+            border-radius: 50%;
+            vertical-align: middle;
+            margin-right: 10px;
+            width: 30px;
+            height: 30px;
+            object-fit: cover;
+            border: 1px solid #eee;
+        }
+
+        tbody td .fas {
+            margin-right: 10px;
+            cursor: pointer;
+            color: var(--text-color-light);
+            transition: color 0.2s ease;
+        }
+
+        tbody td .fas:hover {
+            color: var(--primary-color);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            margin-top: auto;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .pagination button {
+            padding: 8px 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: var(--bg-white);
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .pagination button:hover:not(.active) {
+            background-color: #f0f0f0;
+            border-color: #aaa;
+        }
+
+        .pagination button.active {
+            background: var(--primary-blue);
+            color: black;
+            border-color: var(--primary-blue);
+        }
+
+        .pagination span {
+            display: flex;
+            gap: 5px;
+        }
+
+        .pagination span button {
+            min-width: 35px;
+            text-align: center;
+        }
+
+        /* Footer buttons */
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            padding-top: 15px;
+        }
+
+        .save-btn1 { /* "Close" button */
+            background: var(--bg-white);
+            border: 1px solid #ccc;
+            color: var(--text-color);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .save-btn1:hover {
+            background-color: #f0f0f0;
+            border-color: #aaa;
+        }
+
+        .pay-btn { /* "Reconcile" button */
+            background-color: #2f73f2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .pay-btn:hover {
+            background-color: #1a56c9;
+        }
+
+        /* Responsive Styles */
+      /* Responsive Styles */
+@media screen and (max-width: 768px) {
+    body {
+        overflow-y: auto; /* Allow body to scroll if content overflows vertically */
+        overflow-x: hidden; /* Prevent horizontal scrolling on the body */
+    }
+
+            .header {
+                padding: 0 15px; /* Smaller padding for mobile header */
+            }
+
+            .menu-toggle {
+                display: block;
+                padding: 5px; /* Add some padding around the menu icon */
+            }
+
+            .left-section .logo {
+                display: none; /* Hide logo on mobile as per image */
+            }
+
+            .header-btn {
+                padding: 8px 12px; /* Smaller padding for header buttons */
+                border-radius: 50%; /* Make chat and bell circular */
+                box-shadow: none; /* Remove shadow from these buttons */
+                background-color: var(--mobile-header-icon-bg); /* New background color */
+                border: 1px solid var(--mobile-header-icon-border); /* New border */
+                color: var(--mobile-header-icon-color); /* New icon color */
+                font-size: 1em; /* Adjust font size for consistency */
+                width: 38px; /* Fixed width for circular buttons */
+                height: 38px; /* Fixed height for circular buttons */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .header-btn:hover {
+                background-color: #e2e8f0; /* Slightly darker on hover */
+                transform: none; /* No scale transform on mobile buttons */
+            }
+
+            .header-btn:first-of-type { /* Adjust 'Generate' button specifically */
+                background-color: #e0e7ff; /* Lighter blue background */
+                color: var(--primary-color);
+                border-radius: 10px; /* More rounded rectangle */
+                width: auto; /* Auto width */
+                height: auto; /* Auto height */
+                padding: 8px 12px;
+                display: flex; /* Ensure content is centered */
+                align-items: center;
+                gap: 5px; /* Gap between icon and text */
+                border: none; /* No border for generate button */
+            }
+
+            .header-btn:first-of-type .btn-text {
+                display: block; /* Show text for 'Generate' button */
+            }
+
+            .dropdown {
+                padding: 8px 12px; /* Smaller padding for dropdown */
+                border-radius: 10px; /* More rounded corners */
+                font-size: 0.9em;
+                color: #4a5568; /* Darker text color */
+                border: 1px solid var(--mobile-header-icon-border);
+                background-color: var(--mobile-header-icon-bg);
+            }
+
+            .profile-pic {
+                width: 38px;
+                height: 38px;
+                border: 2px solid #a8c8f8; /* Keep existing border */
+            }
+
+            .left-section,
+            .right-section {
+                gap: 8px; /* Smaller gap in header */
+            }
+
+    /* Main content adjustments */
+    .container {
+        padding: 15px; /* Increased padding for more overall gap */
+        height: calc(100vh - 55px); /* Adjusted for new header height */
+        padding-top: 10px; /* Adjust top padding as dropdown is now in header */
+        overflow-y: auto; /* Allow vertical scrolling within the container */
+    }
+
+    .box {
+        padding: 20px; /* Increased padding inside the box */
+        height: auto; /* Allow height to adjust based on content */
+        min-height: 100%; /* Ensure it takes full height if content is short */
+    }
+
+    h2 {
+        margin-bottom: 20px; /* Consistent margin */
+    }
+
+    .row {
+        flex-direction: column;
+        gap: 20px; /* More gap between stacked input rows */
+    }
+
+    .reconcile-box {
+        margin-bottom: 20px; /* More gap below reconcile box */
+    }
+
+    .reconcile-box .row {
+        gap: 15px; /* More gap between reconcile items */
+    }
+
+    .search-section {
+        flex-wrap: wrap; /* Allow wrapping */
+        padding: 10px; /* Adjust padding */
+        gap: 10px; /* More gap in search section */
+        margin-bottom: 20px; /* More gap below search section */
+        height: auto; /* Allow height to adjust */
+        align-items: center; /* Center items vertically */
+    }
+
+    .search-section i {
+        order: 1; /* Place search icon first */
+        margin-right: 5px;
+    }
+
+    .search-section input[type="text"] {
+        width: calc(100% - 30px); /* Adjust width for icon */
+        order: 2; /* Place input next */
+        flex-grow: 1;
+    }
+
+    .search-section .btn-outline {
+        padding: 8px 12px; /* Smaller padding for filter/sort buttons */
+        font-size: 14px; /* Adjusted font size */
+        flex: 1 1 calc(50% - 5px); /* Two buttons per row, with gap */
+        max-width: calc(25% - 5px);
+        order: 3; /* Place buttons last */
+        justify-content: center;
+    }
+    .btn-outline span{
+        font-size: 0;
+    }
+
+    /* Table and its responsive wrapper */
+    .table-responsive {
+        margin-bottom: 25px; /* Adjust as needed */
+        overflow-x: auto; /* This is the key: enables horizontal scrolling for the table */
+        -webkit-overflow-scrolling: touch; /* Improves scrolling on iOS */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        min-width: 600px; /* Ensure table is wide enough to scroll horizontally */
+    }
+
+    thead th, tbody td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    tbody td img {
+        width: 25px;
+        height: 25px;
+        margin-right: 5px;
+    }
+
+    .pagination {
+        flex-direction: row; /* Keep as row */
+        justify-content: space-between; /* Space between items */
+        align-items: center;
+        gap: 10px; /* Gap between buttons */
+        padding: 10px 0;
+    }
+
+    .pagination button {
+        padding: 8px 12px; /* Smaller padding for pagination buttons */
+        font-size: 13px; /* Smaller font for pagination buttons */
+        border-radius: 6px;
+        flex-shrink: 0; /* Prevent shrinking */
+        color:black;
+    }
+
+    .pagination span {
+        display: flex;
+        gap: 5px;
+        flex-grow: 1; /* Allow span to grow */
+        justify-content: center; /* Center page numbers */
+    }
+
+    .pagination span button {
+        min-width: 30px; /* Slightly smaller page number buttons */
+        padding: 8px 10px;
+        font-size: 13px;
+        border-radius: 6px;
+    }
+
+    .buttons {
+        display: flex;
+        flex-direction: column; /* Stack footer buttons */
+        gap: 10px; /* More gap between footer buttons */
+        padding: 15px; /* Add padding to the footer buttons container */
+        background-color: var(--bg-white); /* Match box background */
+        border-top: 1px solid var(--border-color); /* Add a top border */
+        position: sticky; /* Make footer sticky */
+        bottom: 0; /* Stick to the bottom */
+        left: 0;
+        right: 0;
+        z-index: 99; /* Ensure it's above content but below header */
+        width: 100%; /* Full width */
+        box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.05); /* Add shadow to the top */
+        box-sizing: border-box; /* Include padding in width calculation */
+    }
+
+    .save-btn1, .pay-btn {
+        width: 100%; /* Full width */
+        padding: 12px 0; /* Larger padding for touch targets */
+        font-size: 16px; /* Larger font size */
+        border-radius: 8px; /* More rounded */
+    }
+    .box{
+        background-color: white;
+    }
+
+    .pay-btn { /* Reconcile button on top */
+        order: -1;
+    }
+
+    .diff{
+        margin-right: 25px;
+    }
+}
+    </style>
+</head>
+<body>
+    
+<div class="header">
+        <div class="left-section">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLjX3rfIZw-1W6jrHmkDohECiQfalX4mko0p7lT77IBUgCZNC2"
+                alt="Logo" class="logo" />
+            <button class="menu-toggle" id="menuToggle">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png" alt="menu" />
+            </button>
+        </div>
+        <div class="right-section">
+            <button class="header-btn">⚙️ </button>
+            <button class="header-btn">💬</button>
+            <button class="header-btn">🔔</button>
+            <select class="dropdown">
+                <option selected>Bangalore</option>
+                <option>Mumbai</option>
+                <option>Delhi</option>
+            </select>
+            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Profile" class="profile-pic" />
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="box">
+            <h2>Reconciliation</h2>
+            <div class="row">
+                <div style="flex: 1;">
+                    <label>Account</label>
+                    <select>
+                        <option>Cash</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label>Date</label>
+                    <input type="date" value="2025-03-23"/>
+                </div>
+            </div>
+            <div class="reconcile-box">
+                <div class="row">
+                    <div>Current balance <input type="text" value="$2000" readonly /></div>
+                    <div>Calculated balance <input type="text" value="$1500" readonly /></div>
+                    <div>Difference <input class="diff" type="text" value="$500" readonly /></div>
+                </div>
+            </div>
+
+            <div class="search-section">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search" />
+                <button class="btn-outline"><i class="fas fa-filter"></i><span>Filter</span> </button>
+                <button class="btn-outline"><i class="fas fa-sort"></i><span>Sort</span> </button>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Running Balance</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🥦 Groceries</td>
+                            <td>Wholefoods</td>
+                            <td>31-03-2022</td>
+                            <td class="amount">- $10.00</td>
+                            <td>$120.00</td>
+
+                        </tr>
+                        <tr>
+                            <td>🚗 Automobile</td>
+                            <td>Gasoline</td>
+                            <td>29-03-2022</td>
+                            <td class="amount">- $20.00</td>
+                            <td>$130.00</td>
+                        </tr>
+                        <tr>
+                            <td>🎬 Movies & Video</td>
+                            <td>Netflix</td>
+                            <td>27-03-2022</td>
+                            <td class="amount">- $5.00</td>
+                            <td>$150.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <button id="prevBtn">&larr; Previous</button>
+                <span id="pages">
+                    <button class="active">1</button>
+                    <button>2</button>
+                </span>
+                <button id="nextBtn">Next &rarr;</button>
+            </div>
+
+            <div class="buttons">
+                <button class="save-btn1" onclick="history.back()">Close</button>
+                <button class="pay-btn">Reconcile</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

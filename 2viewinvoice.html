@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tax Invoice - Complete</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 10px; /* Increased body padding */
+            background: #f0f0f0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal scrollbar on body */
+        }
+
+        .invoice-container {
+            width: 680px; /* Standard A4 width in px (approx. 210mm) */
+            background: #fff;
+            border: 1px solid #000;
+            box-sizing: border-box;
+            padding: 12px; /* Increased container padding */
+            box-shadow: 0 0 5px rgba(0,0,0,0.2); /* Slightly larger shadow */
+            overflow: hidden; /* Hide any internal overflow for the container */
+        }
+
+        .invoice-header {
+            text-align: center;
+            font-size: 20px; /* Increased header font size */
+            font-weight: bold;
+            padding-bottom: 8px; /* Increased padding */
+            margin-bottom: 8px; /* Increased margin for separation */
+        }
+
+        .text-detail {
+            font-size: 11px; /* Increased font size for details */
+            line-height: 1.4; /* Adjusted line height for readability */
+            margin: 0;
+            padding: 0;
+            white-space: normal;
+        }
+        .text-detail strong {
+            font-size: 11px; /* Ensure strong also has increased font size */
+        }
+
+        .top-details-section {
+            border: 1px solid #000;
+            display: flex;
+            flex-wrap: nowrap;
+            margin-bottom: 12px; /* Increased margin */
+        }
+
+        .left-column {
+            width: 55%;
+            box-sizing: border-box;
+            border-right: 1px solid #000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .company-info, .buyer-info {
+            padding: 8px; /* Increased padding */
+            border-bottom: 1px solid #000;
+            flex-grow: 1;
+        }
+
+        .buyer-info {
+            border-bottom: none;
+        }
+
+        .right-column {
+            width: 56%; /* Adjusted width to ensure it fits with left-column (55% + 45% = 100%) */
+            box-sizing: border-box;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .invoice-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px; /* Increased padding */
+            border-bottom: 1px solid #000;
+            box-sizing: border-box;
+        }
+
+        .invoice-line:last-of-type {
+            border-bottom: 0px;
+        }
+
+        .invoice-line span:first-child {
+            width: 55%; /* Adjusted width for labels */
+            text-align: left;
+        }
+
+        .invoice-line span:last-child {
+            width: 45%; /* Adjusted width for values */
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .invoice-main-details {
+            display: flex;
+            border-bottom: 1px solid #000;
+        }
+
+        .invoice-main-details .invoice-line {
+            border-bottom: none; /* Remove individual borders within this group */
+            width: 60%;
+            padding:5px 0px; /* Smaller padding for side-by-side elements */
+        }
+
+        .invoice-main-details .invoice-line:first-child {
+            border-right: 1px solid #000; /* Add a separator between Invoice No and Date */
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px; /* Increased margin */
+            margin-bottom: 10px;
+            font-size: 11px; /* Increased table font size */
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 5px 8px; /* Increased padding */
+            text-align: center;
+            vertical-align: top;
+        }
+
+        thead th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+        }
+
+        tfoot td {
+            font-weight: bold;
+        }
+
+        .amount-in-words,
+        .tax-in-words {
+            font-size: 13px; /* Increased font size */
+            margin-top: 10px; /* Increased margin */
+            line-height: 1.5; /* Adjusted line height */
+        }
+
+        .bank-signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px; /* Increased margin */
+            font-size: 11px; /* Increased font size */
+        }
+
+        .bank-details p {
+            margin: 0;
+            line-height: 1.5; /* Adjusted line height */
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 11px; /* Increased font size */
+            margin-top: 15px; /* Increased margin */
+            border-top: 1px solid #eee;
+            padding-top: 8px;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .particulars-right-align {
+            float: right;
+        }
+
+        .item-amount-cell {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .text-block-para {
+            margin: 0;
+            line-height: 1.4;
+            font-size: 11px; /* Consistent with other text */
+        }
+
+        .bank-details {
+            width: 55%;
+        }
+
+        .signature {
+            width: 40%;
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            height: 80px; /* Adjusted height for more space */
+        }
+
+        .signature-line {
+            /* border-top: 1px solid #000; */
+            padding-top: 2px;
+            margin-top: 5px; /* Small margin after text to line */
+            width: 100%; /* Ensure line spans full width of signature box */
+            display: inline-block; /* Essential for width to apply */
+            font-size: 11px; /* Increased font size */
+        }
+
+        /* Remove the fixed height div */
+        div[style="height: 30px;"] {
+            display: none;
+        }
+        
+        .box {
+            padding: 8px; /* Increased box padding */
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 11px; /* Increased box content font size */
+            background: #fcfcfc;
+           /* Added a subtle border to boxes */
+        }
+        .box p {
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Print specific adjustments */
+        @media print {
+            body {
+                padding: 0;
+                background: #fff;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                overflow: hidden; /* Ensure no scrollbar in print */
+            }
+            .invoice-container {
+                border: none;
+                box-shadow: none;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="invoice-container">
+
+    <div class="invoice-header">Tax Invoice</div>
+
+    <div class="top-details-section">
+        <div class="left-column">
+            <div class="company-info">
+                <p class="text-detail"><strong>XYZ PRIVATE LIMITED</strong></p>
+                <p class="text-detail">Address :</p>
+                <p class="text-detail">GSTIN/UIN: </p>
+                <p class="text-detail">State: </p>
+                <p class="text-detail">Contact: </p>
+            </div>
+            <div class="buyer-info">
+                <p class="text-detail"> (Bill to)</p>
+                <p class="text-detail"><strong>BuyerXYZ & CO</strong></p>
+                <p class="text-detail">Address :</p>
+                <p class="text-detail">Contact: </p>
+            </div>
+        </div>
+
+        <div class="right-column">
+            <div class="invoice-main-details">
+                <div class="invoice-line">
+                    <span class="text-detail">Invoice No:</span><br>
+                    <span class="text-detail"></span>
+                </div>
+                <div class="invoice-line">
+                    <span class="text-detail">Invoice Date:</span>
+                    <span class="text-detail"></span>
+                </div>
+                
+            </div>
+             <div class="invoice-main-details">
+                <div class="invoice-line">
+                    <span class="text-detail">Buyer's Order No:</span><br>
+                    <span class="text-detail"></span>
+                </div>
+                <div class="invoice-line">
+                    <span class="text-detail">Order Date:</span>
+                    <span class="text-detail"></span>
+                </div>
+                
+            </div>
+           
+            
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Sl No.</th>
+                <th>Particulars</th>
+                <th>HSN/SAC</th>
+                <th>GST Rate</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>
+                    <strong>Subscription Charges</strong><br>
+                 <strong>   <span class="particulars-right-align">CGST 9%</span><br>
+                    <span class="particulars-right-align">SGST 9%</span></strong><br><br><br><br><br><br><br><br><br>
+                </td>
+                <td></td>
+                <td>18%</td>
+                <td class="item-amount-cell">
+                    </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="total-row">
+                <td></td>
+           <span><td>Total: </td></span> 
+
+                <td> </td>
+                <td> </td>
+                <td> </td>
+
+
+            </tr>
+           
+            <tr>
+                <td colspan="5" class="right" style="border:none; padding-top: 1px; font-style: italic;">E. & O. E</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="box" style="margin-bottom: 5px;">
+        <p class="text-block-para">Amount Chargeable (in words):<br> <strong>INR ELEVEN THOUSAND EIGHT HUNDRED ONLY</strong></p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th rowspan="2">HSN</th>
+                <th rowspan="2">Taxable Value</th>
+                <th colspan="2">CGST</th>
+                <th colspan="2">SGST/UTGST</th>
+                <th rowspan="2">Total Tax Amount</th>
+            </tr>
+            <tr>
+                <th>Rate</th>
+                <th>Amount</th>
+                <th>Rate</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td class="right"></td>
+                <td>9%</td>
+                <td class="right"></td>
+                <td>9%</td>
+                <td class="right"></td>
+                <td class="right"></td>
+            </tr>
+            <tr class="total-row">
+                <td ></td>
+                <td>Total:</td>
+                <td></td>
+                <td ></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="box" style="margin-bottom: 8px;">
+        <p class="text-block-para">Tax Amount (in words):<br> <strong>INR One Thousand Eight Hundred Only</strong></p><br>
+        <p>Payment Term's And Condition's</p>
+    </div>
+
+    <div class="bank-signature-section">
+        <div class="bank-details">
+            <p class="text-block-para">Company's Bank Details:</p>
+            <p class="text-block-para">Bank Name : <strong></strong></p>
+            <p class="text-block-para">A/c No. : <strong></strong></p>
+            <p class="text-block-para">Branch & IFSC Code : <strong></strong></p>
+        </div>
+
+        <div class="signature">
+            <p class="text-block-para">for XYZ PRIVATE LIMITED</p><br><br><br>
+            <span class="signature-line">Authorised Signatory</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        This is a computer-generated invoice.
+    </div>
+</div>
+</body>
+</html>

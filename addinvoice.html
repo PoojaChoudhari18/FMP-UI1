@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Invoice</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* Base styles for desktop */
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+    }
+
+    .invoice-container {
+      background: #fff;
+      max-width: 960px;
+      height: 85vh; /* Fixed height for desktop */
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid black;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      color: #333;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .grid input,
+    .grid select {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .table-wrapper {
+      flex: 1; /* Allows the table to take available vertical space */
+      overflow-y: auto; /* Enables vertical scrolling for table content */
+      overflow-x: auto; /* Enables horizontal scrolling for the table */
+      margin-bottom: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+    }
+
+    table {
+      width: 100%; /* Table takes full width of its container */
+      min-width: 600px; /* Ensure minimum width to prevent excessive squishing on smaller screens */
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    table th, table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    table th {
+      background-color: #f2f2f2;
+    }
+
+    .remarks {
+      resize: vertical; /* Allow vertical resizing only */
+      height: 50px;
+      min-height: 50px; /* Ensure a minimum height */
+      padding: 8px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      width: 100%; /* Ensure it takes full width */
+    }
+
+    .totals {
+      font-size: 13px;
+      text-align: right;
+      margin-bottom: 10px;
+      line-height: 1.5;
+      color: #444;
+    }
+
+    .totals strong {
+      font-size: 14px;
+      color: #000;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .buttons button {
+      padding: 8px 14px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .buttons .Save-btn { /* This class seems to be for 'Close' button in your HTML */
+      background-color: #e0e0e0;
+      color: #333; /* Added color for consistency */
+    }
+
+    .buttons .draft-btn {
+      background-color: #f3f3f3;
+    }
+
+    .buttons .save-btn {
+      background-color: #2563eb;
+      color: #fff;
+    }
+      .form-group{
+        font-weight: bold;
+      }
+
+    /* Responsive adjustments for screens up to 768px wide */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px; /* Reduce overall padding for smaller screens */
+      }
+
+      .invoice-container {
+        margin: 10px auto; /* Adjust margin */
+        padding: 15px; /* Reduce padding */
+        height: auto; /* Allow height to adjust based on content */
+        min-height: 90vh; /* Ensure it takes up most of the viewport height */
+      }
+
+      h2 {
+        font-size: 20px; /* Slightly smaller heading */
+      }
+
+      .grid {
+        grid-template-columns: 1fr; /* Stack all grid items vertically */
+        gap: 15px; /* Increase gap between stacked items */
+      }
+
+      .grid input,
+      .grid select {
+        padding: 10px; /* Increase padding for better touch targets */
+        font-size: 16px; /* Larger font for readability on mobile */
+      }
+
+      table {
+        min-width: 500px; /* Maintain a minimum width for the table to ensure horizontal scroll */
+      }
+
+      table th, table td {
+        padding: 10px 5px; /* Adjust padding for table cells on smaller screens */
+        font-size: 12px; /* Slightly smaller font for table content */
+      }
+
+      .remarks {
+        height: 80px; /* Increase remarks textarea height on mobile */
+      }
+
+      .totals {
+        font-size: 14px; /* Slightly larger font for totals */
+      }
+
+      .totals strong {
+        font-size: 16px; /* Larger font for total due amount */
+      }
+
+      .buttons {
+        flex-direction: column-reverse; /* Stack buttons, "Close" on top of "Save" */
+        gap: 10px; /* Space between stacked buttons */
+      }
+
+      .buttons button {
+        width: 100%; /* Make buttons full width */
+        padding: 12px 0; /* Increase padding for better touch targets */
+        font-size: 16px; /* Larger font for buttons */
+      }
+      .form-group{
+        font-weight: bold;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <h2>Add Invoice</h2><br><br>
+
+   <div class="grid">
+    <div class="form-group">
+        <label for="customer">Customer*</label><br>
+        <select id="customer">
+            <option>Nikhil Sharma</option>
+            <option selected>Nikhil Sharma</option> </select>
+    </div>
+    <div class="form-group">
+        <label for="invoice-number">Invoice number</label><br>
+        <input type="text" id="invoice-number" value="#invc00011591">
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label><br>
+        <input type="email" id="email" value="nikhil.sharma2@larsentoubro.com">
+    </div>
+    <div class="form-group">
+        <label for="terms">Terms</label><br>
+        <select id="terms">
+            <option selected>Net 30</option>
+            </select>
+    </div>
+    <div class="form-group">
+        <label for="bill-to">Bill to</label><br>
+        <input type="text" id="bill-to" value="bryan@bizlem.com">
+    </div>
+    <div class="form-group">
+        <label for="invoice-date">Invoice date</label><br>
+        <input type="date" id="invoice-date" value="2025-03-23">
+    </div>
+    <div class="form-group">
+        <label for="due-date">Due date</label><br>
+        <input type="date" id="due-date" value="2025-03-23">
+    </div>
+</div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>PRODUCT NAME</th>
+            <th>DESCRIPTION</th>
+            <th>QUANTITY</th>
+            <th>RATE</th>
+            <th>AMOUNT</th>
+            <th>MORE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Commissions</td>
+            <td>Commission..</td>
+            <td>1</td>
+            <td>25</td>
+            <td>$25.00</td>
+            <td><i class="fas fa-ellipsis-h"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <textarea class="remarks" placeholder="Write remarks .."></textarea>
+
+    <div class="totals">
+      <div>Sub total: $3000.00</div>
+      <div>Tax: $75.00</div>
+      <div>Total: $3075.00</div>
+      <div>Total paid: $0.00</div>
+      <div><strong>Total due amount: $3075.00</strong></div>
+    </div>
+
+    <div class="buttons">
+       <button class="draft-btn">Draft</button>
+      <button class="Save-btn" onclick="history.back()">Close</button>
+      <button class="save-btn">Save</button>
+    </div>
+  </div>
+</body>
+</html>
